@@ -1,7 +1,7 @@
 # SQL Tutor :desktop_computer:
 
 [![Java](https://img.shields.io/badge/Java-17+-blue?logo=openjdk)](https://openjdk.org/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0+-6DB33F?logo=spring)](https://spring.io/)
+[![Spring](https://img.shields.io/badge/Spring-6+-6DB33F?logo=spring)](https://spring.io/)
 [![HTMX](https://img.shields.io/badge/HTMX-1.9.0-0A0A0A?logo=htmx)](https://htmx.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
