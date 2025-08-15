@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+    tailwind:
+        cmds:
+            - npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --watch
+
+    jetty:
+        cmds:
+            - mvn jetty:run
+
+    serve:
+        cmds:
+            - node prefix-tailwind.js & mvn jetty:run

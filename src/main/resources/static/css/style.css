@@ -1,0 +1,72 @@
+/* NAV BAR */
+@media (min-width: 768px) {
+	#navbar-default.expanded {
+		animation: none;
+	}
+	#navbar-default.expanded > ul {
+		animation: none;
+	}
+}
+
+@media (max-width: 767px) {
+	#navbar-default.expanded {
+		animation: animate-nav 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	}
+	#navbar-default.expanded > ul {
+		animation: animate-nav-content 1s
+			cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	}
+}
+
+@keyframes animate-nav {
+	0% {
+		height: 0px;
+	}
+	100% {
+		height: 248px;
+	}
+}
+
+@keyframes animate-nav-content {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/* ANIMATE MESSAGE BOXES */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(-20px);
+	}
+}
+
+.fade-in {
+	animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+	animation: fadeOut 0.5s forwards;
+}
+
+.hidden-message {
+	display: none;
+}

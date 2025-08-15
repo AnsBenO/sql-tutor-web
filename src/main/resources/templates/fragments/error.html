@@ -1,0 +1,44 @@
+<div class="bg-transparent fixed top-12 left-1/2 transform -translate-x-1/2 z-50 transition-all"
+      th:fragment="errorMessageBox (error)">
+      <div role="alert" id="errorNotification"
+            class="p-4 shadow-lg text-sm rounded-lg bg-gray-800 text-red-400 w-full h-full fade-in" th:if="${error}">
+            <span class="font-bold">ERROR!</span>
+            <span th:text="${error}" class=""></span>
+            <button
+                  class="ml-4 text-slate-800 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-500 focus:outline-none absolute right-0 top-0"
+                  onclick="closeErrorNotification()" onKeyPress="closeErrorNotification(event)"
+                  onKeyDown="closeErrorNotification(event)" onKeyUp="closeErrorNotification(event)">
+                  <i class="fas fa-times h-6 w-6"></i>
+            </button>
+      </div>
+      <script th:inline="javascript">
+            setTimeout(() => {
+                  const errorNotification =
+                        document.getElementById("errorNotification");
+                  if (errorNotification) {
+                        errorNotification.classList.remove("fade-in");
+                        errorNotification.classList.add("fade-out");
+                        setTimeout(() => {
+                              errorNotification.classList.add("hidden-message");
+                              // remove from DOM
+                              errorNotification.remove();
+                        }, 500);
+                  }
+            }, 10000);
+
+            function closeErrorNotification() {
+                  const errorNotification =
+                        document.getElementById("errorNotification");
+                  if (errorNotification) {
+                        errorNotification.classList.remove("fade-in");
+                        errorNotification.classList.add("fade-out");
+                        // Hide the element after the fade-out animation completes
+                        setTimeout(() => {
+                              errorNotification.classList.add("hidden-message");
+                              // remove from DOM
+                              errorNotification.remove();
+                        }, 500);
+                  }
+            }
+      </script>
+</div>

@@ -1,0 +1,15 @@
+<!-- fragments/table-list.html -->
+<div th:fragment="tableList">
+      <h2 class="font-bold mb-2">Tables</h2>
+      <form hx-post="/showTable" hx-target="#result-table" hx-swap="innerHTML">
+            <select name="tableName" size="10" class="select select-bordered w-full mb-2" required>
+                  <option th:each="table : ${tables}" th:value="${table}" th:text="${table}"></option>
+            </select>
+            <button type="submit" class="btn btn-info w-full">Show Table</button>
+      </form>
+      <!--? ERROR MESSAGE BOX -->
+      <div th:replace="~{fragments/error :: errorMessageBox(error=${error})}"></div>
+
+      <!-- ? SUCCESS MESSAGE BOX -->
+      <div th:replace="~{/fragments/success :: successMessageBox(message=${success})}"></div>
+</div>
