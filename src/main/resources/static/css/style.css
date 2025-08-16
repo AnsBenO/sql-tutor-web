@@ -1,3 +1,7 @@
+* {
+	box-sizing: border-box;
+}
+
 /* NAV BAR */
 @media (min-width: 768px) {
 	#navbar-default.expanded {

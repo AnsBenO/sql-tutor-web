@@ -1,29 +1,121 @@
 <!-- fragments/database-select.html -->
 <div th:fragment="databaseSelect">
-      <fieldset th:if="${error} == null">
-            <legend class="text-lg font-bold text-indigo-950 mb-4 flex items-center gap-2">
+      <fieldset th:if="${error} == null" class="bg-white p-6 rounded-lg border border-gray-200">
+            <legend class="text-xl font-semibold text-indigo-800 mb-4 flex items-center gap-2">
                   <i class="fas fa-database"></i>
                   Select Database
             </legend>
-            <form hx-post="/connectDatabase" hx-target="#table-list" hx-swap="innerHTML" class="flex gap-2 mb-4">
-                  <div class="relative flex-1">
-                        <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
-                        <select name="database"
-                              class="w-full pl-10 pr-4 py-3 bg-indigo-100 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                              required>
+
+            <!-- Search + Dropdown -->
+            <div class="flex flex-col gap-4">
+
+                  <!-- Search + Dropdown Box -->
+                  <div class="flex-1 relative">
+                        <div class="relative">
+                              <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-indigo-500"></i>
+                              <input type="text" id="dbSearch" placeholder="Search for a database..."
+                                    class="w-full border border-gray-300 rounded-xl pl-10 pr-12 py-3 bg-gray-50 font-medium text-indigo-900 focus:outline-none focus:border-gray-300 focus:border-t-2 focus:border-l-2 focus:border-r-2 focus:border-b-0 focus:rounded-b-none transition" />
+
+                              <!-- Arrow -->
+                              <button id="dbArrow" type="button"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-indigo-600 hover:text-indigo-800 rounded-full p-2 transition">
+                                    <i class="fas fa-chevron-down"></i>
+                              </button>
+                        </div>
+
+                        <!-- Dropdown Options -->
+                        <div class="overflow-y-auto max-h-72 border-b-2 border-l-2 border-r-2 border-gray-300 rounded-b-xl bg-white hidden z-10 absolute w-full shadow-md "
+                              id="dbOptions">
+                              <div th:each="db : ${databases}" th:data-value="${db}"
+                                    class="db-option pl-10 pr-12 py-3 border-gray-300 hover:bg-indigo-50 cursor-pointer transition-colors flex items-center justify-between">
+                                    <span th:text="${db}" class="font-medium text-gray-700"></span>
+                                    <i class="fas fa-database text-indigo-400 ml-2"></i>
+                              </div>
+                        </div>
+                  </div>
+
+                  <!-- Hidden Form (auto submit via JS/HTMX) -->
+                  <form id="dbForm" hx-post="/connectDatabase" hx-target="#table-list" hx-swap="innerHTML">
+                        <select name="database" id="selectedDB" class="hidden" required>
                               <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
                         </select>
-                  </div>
-                  <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <i class="fas fa-link"></i>
-                        Connect
-                  </button>
-            </form>
+                  </form>
+            </div>
       </fieldset>
-      <!--? ERROR MESSAGE BOX -->
+
+      <!-- ERROR MESSAGE BOX -->
       <div th:if="${error} != null" th:replace="~{fragments/error :: errorMessageBox(error=${error})}"></div>
 
-      <!-- ? SUCCESS MESSAGE BOX -->
+      <!-- SUCCESS MESSAGE BOX -->
       <div th:if="${success} != null" th:replace="~{/fragments/success :: successMessageBox(message=${success})}"></div>
+
+      <script th:inline="javascript">
+            var dbOptionsDiv = document.getElementById('dbOptions');
+            var searchInput = document.getElementById('dbSearch');
+            var dbArrow = document.getElementById('dbArrow');
+            var selectedDbInput = document.getElementById('selectedDB');
+            var dbForm = document.getElementById('dbForm');
+
+
+            // Show database options on focus
+            searchInput.addEventListener('focus', (e) => {
+                  e.stopPropagation();
+                  dbOptionsDiv.classList.remove('hidden');
+
+                  let icon = dbArrow.querySelector('svg');
+                  icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+            });
+
+            searchInput.addEventListener('blur', (e) => {
+                  // Hide options if clicked outside
+                  setTimeout(() => {
+                        if (!dbOptionsDiv.contains(document.activeElement)) {
+                              dbOptionsDiv.classList.add('hidden');
+                              let icon = dbArrow.querySelector('svg');
+                              icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                        }
+                  }, 100); // Delay to allow click event to register
+            });
+
+            // Toggle dropdown
+            dbArrow.addEventListener('click', function (e) {
+                  e.stopPropagation();
+
+                  // replace the svg with i element
+                  let icon = dbArrow.querySelector('svg');
+                  if (dbOptionsDiv.classList.contains('hidden')) {
+                        dbOptionsDiv.classList.remove('hidden');
+                        searchInput.focus();
+                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                  } else {
+                        dbOptionsDiv.classList.add('hidden');
+                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                  }
+            });
+
+
+
+            // Select DB and auto-submit form
+            dbOptionsDiv.addEventListener('click', function (e) {
+                  let option = e.target.closest('.db-option');
+                  if (option) {
+                        let db = option.getAttribute('data-value');
+                        selectedDbInput.value = db;
+                        document.querySelector("#dbSearch").value = db; // Update search input
+                        dbOptionsDiv.classList.add('hidden');
+                        dbForm.requestSubmit();
+                  }
+            });
+
+            // Filter options
+            searchInput.addEventListener('input', function () {
+                  let searchTerm = this.value.toLowerCase();
+                  let dbOptions = dbOptionsDiv.querySelectorAll('.db-option');
+                  dbOptions.forEach(option => {
+                        let dbName = option.getAttribute('data-value').toLowerCase();
+                        option.style.display = dbName.includes(searchTerm) ? '' : 'none';
+                  });
+            }); 
+      </script>
+
 </div>
