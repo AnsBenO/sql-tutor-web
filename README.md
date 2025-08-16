@@ -29,3 +29,14 @@ A web-based PostgreSQL client for exploring databases, viewing table structures,
 -   Spring Data JDBC
 -   PostgreSQL JDBC Driver
 -   Embedded Jetty Server
+
+## Project Execution
+
+This project uses a Taskfile to manage development workflows. You'll need to have the following installed:
+
+-   [Task](https://taskfile.dev/) (task runner)
+-   Java (for Maven/Jetty)
+-   Node.js (for Tailwind CSS processing)
+-   Maven (build tool)
+
+to run the app in dev mode run the following command: `task serve`
