@@ -1,30 +1,46 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layouts/app.html}" lang="en">
 
 <head>
-      <title>Dashboard</title>
+      <title>Database Explorer</title>
 </head>
 
 <body>
 
       <div layout:fragment="content" class="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg p-8">
             <fieldset>
-                  <!-- <legend class="text-lg font-bold text-blue-950 mb-4">Connect to Server</legend> -->
                   <form hx-post="/connectServer" hx-target="#database-select" hx-swap="innerHTML"
                         class="flex flex-col gap-4 mb-8">
-                        <div class="flex flex-col md:flex-row gap-4">
-                              <input type="text" name="server" placeholder="Server" th:value="${server}"
-                                    class="flex-1 px-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                                    required />
-                              <input type="text" name="username" placeholder="Username"
-                                    class="flex-1 px-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                                    th:value="${username}" required />
-                              <input type="password" name="password" placeholder="Password"
-                                    class="flex-1 px-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
-                                    th:value="${password}" required />
+                        <div class="flex flex-col md:flex-row gap-4 items-end">
+                              <div class="flex-1 relative">
+                                    <i
+                                          class="fas fa-server absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
+                                    <input type="text" name="server" placeholder="Server" th:value="${server}"
+                                          class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                          required />
+                              </div>
+
+                              <div class="flex-1 relative">
+                                    <i
+                                          class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
+                                    <input type="text" name="username" placeholder="Username"
+                                          class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                          th:value="${username}" required />
+                              </div>
+
+                              <div class="flex-1 relative">
+                                    <i
+                                          class="fas fa-key absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
+                                    <input type="password" name="password" placeholder="Password"
+                                          class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                          th:value="${password}" required />
+                              </div>
+
                               <button type="submit"
-                                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <i class="fas fa-plug"></i>
                                     Connect Server
                               </button>
                         </div>
@@ -35,8 +51,11 @@
 
             <div class="flex flex-col md:flex-row gap-8">
                   <!-- Sidebar -->
-                  <div class="md:w-1/4 bg-indigo-50 rounded-lg p-4 shadow-inner overflow-auto max-h-[500px]">
-                        <h2 class="text-lg font-semibold text-indigo-700 mb-4 border-b border-indigo-300 pb-2">Tables
+                  <div class="md:w-1/4 bg-indigo-50 rounded-lg p-4 shadow-inner overflow-auto max-h-[550px]">
+                        <h2
+                              class="text-lg font-semibold text-indigo-700 mb-4 border-b border-indigo-300 pb-2 flex items-center gap-2">
+                              <i class="fas fa-table"></i>
+                              Tables
                         </h2>
                         <div id="table-list" class="space-y-2 text-indigo-900"></div>
                   </div>
@@ -44,19 +63,26 @@
                   <!-- Main Content -->
                   <div class="md:w-3/4 flex flex-col">
                         <form hx-post="/execute" hx-target="#result-table" hx-swap="innerHTML" class="mb-6">
-                              <label for="sql" class="block mb-2 font-semibold text-indigo-700">SQL Statement:</label>
+                              <label for="sql" class="block mb-2 font-semibold text-indigo-700 flex items-center gap-2">
+                                    <i class="fas fa-terminal"></i>
+                                    SQL Statement:
+                              </label>
                               <textarea name="sql" rows="6"
                                     class="w-full p-4 border border-indigo-300 rounded-lg font-mono text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-y"
                                     placeholder="SELECT * FROM ..."></textarea>
                               <button type="submit"
-                                    class="mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                                    Execute
+                                    class="mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <i class="fas fa-play"></i>
+                                    Execute Query
                               </button>
                         </form>
 
                         <div id="result-table"
                               class="overflow-auto rounded-lg border border-indigo-300 shadow-sm p-4 bg-white max-h-[400px]">
-                              Results will appear here
+                              <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                                    <i class="fas fa-database text-4xl mb-2"></i>
+                                    <p>Results will appear here</p>
+                              </div>
                         </div>
                   </div>
             </div>

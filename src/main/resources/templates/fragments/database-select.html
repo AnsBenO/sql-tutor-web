@@ -1,14 +1,24 @@
 <!-- fragments/database-select.html -->
 <div th:fragment="databaseSelect">
       <fieldset th:if="${error} == null">
-            <legend class="text-lg font-bold text-indigo-950 mb-4">Select Database</legend>
+            <legend class="text-lg font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                  <i class="fas fa-database"></i>
+                  Select Database
+            </legend>
             <form hx-post="/connectDatabase" hx-target="#table-list" hx-swap="innerHTML" class="flex gap-2 mb-4">
-                  <select name="database" class="select select-bordered flex-1 bg-slate-300 rounded-md p-4" required>
-                        <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
-                  </select>
+                  <div class="relative flex-1">
+                        <i class="fas fa-list absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
+                        <select name="database"
+                              class="w-full pl-10 pr-4 py-3 bg-indigo-100 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                              required>
+                              <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
+                        </select>
+                  </div>
                   <button type="submit"
-                        class="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">Connect
-                        Database</button>
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-link"></i>
+                        Connect
+                  </button>
             </form>
       </fieldset>
       <!--? ERROR MESSAGE BOX -->

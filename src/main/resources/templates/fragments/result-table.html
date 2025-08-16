@@ -1,22 +1,28 @@
 <!-- fragments/result-table.html -->
 <div th:fragment="resultTable">
       <div th:if="${result}">
-            <table class="table table-zebra w-full">
-                  <thead>
-                        <tr>
-                              <th th:each="col : ${result.columnNames}" th:text="${col}"></th>
-                        </tr>
-                  </thead>
-                  <tbody>
-                        <tr th:each="row : ${result.rows}">
-                              <td th:each="cell : ${row}" th:text="${cell}"></td>
-                        </tr>
-                  </tbody>
-            </table>
+            <div class="overflow-x-auto rounded-lg">
+                  <table class="min-w-full divide-y divide-indigo-200">
+                        <thead th:if="${action} == 'execute'" class="bg-indigo-50">
+                              <tr>
+                                    <th th:each="col : ${result.columnNames}"
+                                          class="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider"
+                                          th:text="${col}"></th>
+                              </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-indigo-200">
+                              <tr th:each="row : ${result.rows}" class="hover:bg-indigo-50 transition-colors">
+                                    <td th:each="cell : ${row}"
+                                          class="px-6 py-4 whitespace-nowrap text-sm text-gray-800" th:text="${cell}">
+                                    </td>
+                              </tr>
+                        </tbody>
+                  </table>
+            </div>
       </div>
       <!--? ERROR MESSAGE BOX -->
       <div th:replace="~{fragments/error :: errorMessageBox(error=${error})}"></div>
-      
+
       <!-- ? SUCCESS MESSAGE BOX -->
       <div th:replace="~{/fragments/success :: successMessageBox(message=${success})}"></div>
 </div>

@@ -1,15 +1,92 @@
 <!-- fragments/table-list.html -->
-<div th:fragment="tableList">
-      <h2 class="font-bold mb-2">Tables</h2>
+<div th:fragment="tableList" class="space-y-3">
+      <!-- Search input for filtering tables (should be done with JavaScript) -->
+      <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
+            <input type="text" id="tableSearch" placeholder="Search tables..."
+                  class="w-full pl-10 pr-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+      </div>
+
       <form hx-post="/showTable" hx-target="#result-table" hx-swap="innerHTML">
-            <select name="tableName" size="10" class="select select-bordered w-full mb-2" required>
-                  <option th:each="table : ${tables}" th:value="${table}" th:text="${table}"></option>
-            </select>
-            <button type="submit" class="btn btn-info w-full">Show Table</button>
+            <input type="hidden" name="tableName" id="selectedTable">
+
+
+            <div class="overflow-y-auto max-h-80 border border-indigo-300 rounded-lg bg-white shadow-inner">
+                  <div id="tableOptions" class="divide-y divide-indigo-200">
+                        <!-- Table options will be inserted here by JavaScript -->
+                        <div th:each="table : ${tables}"
+                              class="table-option p-3 hover:bg-indigo-50 cursor-pointer transition-colors flex items-center justify-between"
+                              th:data-value="${table}">
+                              <span th:text="${table}"></span>
+                              <i class="fas fa-table text-indigo-400 ml-2"></i>
+                        </div>
+                  </div>
+            </div>
+
+            <button type="submit"
+                  class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-3 rounded-lg shadow-md transition duration-300 flex items-center justify-center gap-2 mt-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  id="showTableBtn" disabled>
+                  <i class="fas fa-eye"></i>
+                  Show Table
+            </button>
       </form>
+
       <!--? ERROR MESSAGE BOX -->
       <div th:replace="~{fragments/error :: errorMessageBox(error=${error})}"></div>
 
       <!-- ? SUCCESS MESSAGE BOX -->
       <div th:replace="~{/fragments/success :: successMessageBox(message=${success})}"></div>
+
+      <script th:inline="javascript">
+
+            var tableOptions = document.querySelectorAll('.table-option');
+            var searchInput = document.getElementById('tableSearch');
+            var selectedTableInput = document.getElementById('selectedTable');
+            var showTableBtn = document.getElementById('showTableBtn');
+
+            console.log('Table options:', tableOptions);
+
+            // Handle table selection
+            tableOptions.forEach(option => {
+                  option.addEventListener('click', function () {
+                        // Remove selection from all options
+                        tableOptions.forEach(opt => {
+                              opt.classList.remove('bg-indigo-100', 'border-l-4', 'border-indigo-500');
+                        });
+
+                        // Add selection to clicked option
+                        this.classList.add('bg-indigo-100', 'border-l-4', 'border-indigo-500');
+
+                        // SAFE ACCESS: Check if icon exists before modifying
+                        const clickedIcon = this.querySelector('i');
+                        if (clickedIcon) {
+                              clickedIcon.classList.remove('fa-table', 'text-indigo-400');
+                              clickedIcon.classList.add('fa-eye', 'text-indigo-600');
+                        }
+
+                        // Set hidden input value
+                        const tableName = this.getAttribute('data-value');
+                        selectedTableInput.value = tableName;
+
+                        // Enable show table button
+                        showTableBtn.disabled = false;
+                  });
+            });
+
+
+            // Handle search filtering
+            searchInput.addEventListener('input', function () {
+                  const searchTerm = this.value.toLowerCase();
+
+                  tableOptions.forEach(option => {
+                        const tableName = option.textContent.toLowerCase();
+                        if (tableName.includes(searchTerm)) {
+                              option.classList.remove('hidden');
+                        } else {
+                              option.classList.add('hidden');
+                        }
+                  });
+            });
+
+      </script>
 </div>

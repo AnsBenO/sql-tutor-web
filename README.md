@@ -7,24 +7,29 @@
 
 A web-based PostgreSQL client for exploring databases, viewing table structures, and executing SQL queries in real-time.
 
-![SQL Tutor Interface Concept](screenshots/app-preview.png) *(Add actual screenshot path here)*
+![SQL Tutor Interface Concept](screenshots/app-preview.png) _(Add actual screenshot path here)_
 
 ## Features :sparkles:
 
-- **Database Explorer**: Browse databases/tables in hierarchical view
-- **Schema Inspection**: View table columns, indexes, and relationships
-- **Query Playground**: Execute SQL queries with syntax highlighting
+-   **Database Explorer**: Browse databases/tables in hierarchical view
+-   **Schema Inspection**: View table columns, indexes, and relationships
+-   **Query Playground**: Execute SQL queries with syntax highlighting
 
 ## Tech Stack :gear:
 
 **Frontend**:
-- Thymeleaf templates
-- HTMX for dynamic content
-- Tailwind CSS for styling
 
+-   Thymeleaf templates
+-   HTMX for dynamic content
+-   Tailwind CSS for styling
 
 **Backend**:
-- Spring Framework 
-- Spring Data JDBC
-- PostgreSQL JDBC Driver
-- Embedded Jetty Server
+
+-   Spring Framework
+-   Spring Data JDBC
+-   PostgreSQL JDBC Driver
+-   Embedded Jetty Server
+
+## Screenshot
+
+![Screenshot](screenshots/screenshot.png)

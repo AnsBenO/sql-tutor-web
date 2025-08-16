@@ -80,6 +80,7 @@ public class DatabaseController {
         try {
             QueryResult schema = databaseService.getTableSchema(dbConnection, tableName);
             model.addAttribute("result", schema);
+            model.addAttribute("action", "showTable");
             return "fragments/result-table :: resultTable";
         } catch (SQLException e) {
             model.addAttribute("error", "Error fetching table schema: " + e.getMessage());
@@ -94,6 +95,7 @@ public class DatabaseController {
         try {
             QueryResult result = databaseService.executeQuery(dbConnection, sql);
             model.addAttribute("result", result);
+            model.addAttribute("action", "execute");
             return "fragments/result-table :: resultTable";
         } catch (SQLException e) {
             model.addAttribute("error", "SQL execution error: " + e.getMessage());
