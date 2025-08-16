@@ -3,7 +3,7 @@
       <div th:if="${result}">
             <div class="overflow-x-auto rounded-lg">
                   <table class="min-w-full divide-y divide-indigo-200">
-                        <thead th:if="${action} == 'execute'" class="bg-indigo-50">
+                        <thead class="bg-indigo-50">
                               <tr>
                                     <th th:each="col : ${result.columnNames}"
                                           class="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider"

@@ -87,12 +87,17 @@ public class DatabaseService {
                   List<String> columnNames = new ArrayList<>();
                   List<List<String>> rows = new ArrayList<>();
 
+                  // Add column headers
+                  columnNames.add("Column");
+                  columnNames.add("Type");
+                  columnNames.add("Precision");
+
+                  // Add the column details
                   for (int i = 1; i <= columnCount; i++) {
                         String columnName = metaData.getColumnName(i);
                         String columnType = metaData.getColumnTypeName(i);
                         int precision = metaData.getPrecision(i);
-                        columnNames.add("Column");
-                        rows.add(List.of(String.format("%s <%s> (%d)", columnName, columnType, precision)));
+                        rows.add(List.of(columnName, columnType, String.valueOf(precision)));
                   }
 
                   return new QueryResult(columnNames, rows);
