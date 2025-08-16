@@ -7,7 +7,7 @@
 
 A web-based PostgreSQL client for exploring databases, viewing table structures, and executing SQL queries in real-time.
 
-![SQL Tutor Interface Concept](screenshots/app-preview.png) _(Add actual screenshot path here)_
+![SQL Tutor Interface Concept](screenshots/screenshot.png)
 
 ## Features :sparkles:
 
@@ -29,7 +29,3 @@ A web-based PostgreSQL client for exploring databases, viewing table structures,
 -   Spring Data JDBC
 -   PostgreSQL JDBC Driver
 -   Embedded Jetty Server
-
-## Screenshot
-
-![Screenshot](screenshots/screenshot.png)
