@@ -24,7 +24,7 @@
                         </div>
 
                         <!-- Dropdown Options -->
-                        <div class="overflow-y-auto max-h-72 border-b-2 border-l-2 border-r-2 border-gray-300 rounded-b-xl bg-white hidden z-10 absolute w-full shadow-md "
+                        <div class="overflow-y-auto max-h-72 border-b-2 border-l-2 border-r-2 border-gray-300 rounded-b-xl bg-white hidden absolute w-full shadow-md z-10"
                               id="dbOptions">
                               <div th:each="db : ${databases}" th:data-value="${db}"
                                     class="db-option pl-10 pr-12 py-3 border-gray-300 hover:bg-indigo-50 cursor-pointer transition-colors flex items-center justify-between">
@@ -49,16 +49,16 @@
       <!-- SUCCESS MESSAGE BOX -->
       <div th:if="${success} != null" th:replace="~{/fragments/success :: successMessageBox(message=${success})}"></div>
 
-      <script th:inline="javascript">
+      <script th:if="${error} == null" th:inline="javascript">
             var dbOptionsDiv = document.getElementById('dbOptions');
-            var searchInput = document.getElementById('dbSearch');
+            var dbSearchInput = document.getElementById('dbSearch');
             var dbArrow = document.getElementById('dbArrow');
             var selectedDbInput = document.getElementById('selectedDB');
             var dbForm = document.getElementById('dbForm');
 
 
             // Show database options on focus
-            searchInput.addEventListener('focus', (e) => {
+            dbSearchInput.addEventListener('focus', (e) => {
                   e.stopPropagation();
                   dbOptionsDiv.classList.remove('hidden');
 
@@ -66,7 +66,7 @@
                   icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
             });
 
-            searchInput.addEventListener('blur', (e) => {
+            dbSearchInput.addEventListener('blur', (e) => {
                   // Hide options if clicked outside
                   setTimeout(() => {
                         if (!dbOptionsDiv.contains(document.activeElement)) {
@@ -85,8 +85,11 @@
                   let icon = dbArrow.querySelector('svg');
                   if (dbOptionsDiv.classList.contains('hidden')) {
                         dbOptionsDiv.classList.remove('hidden');
-                        searchInput.focus();
+
                         icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                        setTimeout(() => {
+                              dbSearchInput.focus();
+                        }, 100);
                   } else {
                         dbOptionsDiv.classList.add('hidden');
                         icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
@@ -108,7 +111,7 @@
             });
 
             // Filter options
-            searchInput.addEventListener('input', function () {
+            dbSearchInput.addEventListener('input', function () {
                   let searchTerm = this.value.toLowerCase();
                   let dbOptions = dbOptionsDiv.querySelectorAll('.db-option');
                   dbOptions.forEach(option => {

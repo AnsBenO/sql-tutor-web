@@ -1,6 +1,6 @@
 <!-- fragments/table-list.html -->
 <div th:fragment="tableList" class="space-y-3">
-      <!-- Search input for filtering tables (should be done with JavaScript) -->
+      <!-- Search input for filtering tables -->
       <div class="relative">
             <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
             <input type="text" id="tableSearch" placeholder="Search tables..."
@@ -40,7 +40,7 @@
       <script th:inline="javascript">
 
             var tableOptions = document.querySelectorAll('.table-option');
-            var searchInput = document.getElementById('tableSearch');
+            var tableSearchInput = document.getElementById('tableSearch');
             var selectedTableInput = document.getElementById('selectedTable');
             var showTableBtn = document.getElementById('showTableBtn');
 
@@ -73,7 +73,7 @@
 
 
             // Handle search filtering
-            searchInput.addEventListener('input', function () {
+            tableSearchInput.addEventListener('input', function () {
                   const searchTerm = this.value.toLowerCase();
 
                   tableOptions.forEach(option => {
