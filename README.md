@@ -26,7 +26,6 @@ A web-based PostgreSQL client for exploring databases, viewing table structures,
 **Backend**:
 
 -   Spring Framework
--   Spring Data JDBC
 -   PostgreSQL JDBC Driver
 -   Embedded Jetty Server
 
