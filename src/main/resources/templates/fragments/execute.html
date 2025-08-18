@@ -1,0 +1,25 @@
+<!-- Main Content -->
+<div class="md:w-3/4 flex flex-col" th:fragment="execute">
+      <form hx-post="/execute" hx-target="#result-table" hx-swap="innerHTML" class="mb-6">
+            <label for="sql" class="mb-2 font-semibold text-indigo-700 flex items-center gap-2">
+                  <i class="fas fa-terminal"></i>
+                  SQL Statement:
+            </label>
+            <textarea name="sql" rows="6"
+                  class="w-full p-4 border border-indigo-300 rounded-lg font-mono text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition resize-y"
+                  placeholder="SELECT * FROM ..."></textarea>
+            <button type="submit"
+                  class="mt-3 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <i class="fas fa-play"></i>
+                  Execute Query
+            </button>
+      </form>
+
+      <div id="result-table"
+            class="overflow-auto rounded-lg border border-indigo-300 shadow-sm p-4 bg-white max-h-[400px]">
+            <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                  <i class="fas fa-database text-4xl mb-2"></i>
+                  <p>Results will appear here</p>
+            </div>
+      </div>
+</div>
