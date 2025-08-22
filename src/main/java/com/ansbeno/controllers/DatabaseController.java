@@ -89,7 +89,6 @@ public class DatabaseController {
 
     @PostMapping("/execute")
     public String execute(@RequestParam String sql,
-
             Model model) {
         try {
             QueryResult result = databaseService.executeQuery(dbConnection, sql);
