@@ -38,4 +38,8 @@ This project uses a Taskfile to manage development workflows. You'll need to hav
 -   Node.js (for Tailwind CSS processing)
 -   Maven (build tool)
 
-to run the app in dev mode run the following command: `task serve`
+to run the app in dev mode (live reload) run the following commands:`npm install` then `task serve`
+
+to run without live reload run `mvn jetty:run-war`
+
+the application will be available at: http://localhost:8080/
