@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class DatabaseService {
 
+      private Connection dbConnection;
+
       public Connection getServerConnection(String username, String password, String server) throws SQLException {
             String url = "jdbc:postgresql://" + server + "/postgres";
             log.info("Connecting to server: {}", url);
@@ -26,9 +28,17 @@ public class DatabaseService {
 
       public Connection getDbConnection(String username, String password, String server, String database)
                   throws SQLException {
+
             String url = "jdbc:postgresql://" + server + "/" + database;
             log.info("Connecting to database: {}", url);
             return DriverManager.getConnection(url, username, password);
+      }
+
+      public Connection getCurrentDbConnection() throws SQLException {
+            if (dbConnection != null && !dbConnection.isClosed()) {
+                  return dbConnection;
+            }
+            return null;
       }
 
       public List<String> getDatabases(Connection connection) throws SQLException {
@@ -103,5 +113,13 @@ public class DatabaseService {
 
                   return new QueryResult(columnNames, rows);
             }
+      }
+
+      public void closeConnection() throws SQLException {
+            if (dbConnection != null && !dbConnection.isClosed()) {
+                  dbConnection.close();
+                  log.info("Database connection closed.");
+            }
+
       }
 }

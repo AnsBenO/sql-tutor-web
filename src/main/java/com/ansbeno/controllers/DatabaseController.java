@@ -27,7 +27,7 @@ public class DatabaseController {
 
     private final DatabaseService databaseService;
 
-    private Connection dbConnection;
+    private static final String RESULTS_TABLE_FRAGMENT = "fragments/results-table :: resultsTable";
 
     @GetMapping("/")
     public String index(Model model) {
@@ -65,13 +65,13 @@ public class DatabaseController {
             @ModelAttribute("password") String password,
             Model model) {
         try {
+            // Close previous connection if exists
+            databaseService.closeConnection();
 
+            // Establish new connection
             Connection conn = databaseService.getDbConnection(username, password, server, database);
-            if (dbConnection != null)
-                // Close the previous connection
-                this.dbConnection.close();
-            this.dbConnection = conn; // Store the connection in the session
-            List<String> tables = databaseService.getTables(dbConnection, database);
+
+            List<String> tables = databaseService.getTables(conn, database);
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
             model.addAttribute("success", "Connected to database successfully.");
@@ -86,32 +86,36 @@ public class DatabaseController {
     public String showTable(@RequestParam String tableName,
             Model model) {
         try {
-            QueryResult schema = databaseService.getTableSchema(dbConnection, tableName);
-            model.addAttribute("result", schema);
-            return "fragments/result-table :: resultTable";
+            Connection conn = databaseService.getCurrentDbConnection();
+            if (conn != null) {
+                QueryResult schema = databaseService.getTableSchema(conn, tableName);
+                model.addAttribute("result", schema);
+            }
+
         } catch (SQLException e) {
             model.addAttribute("error", "Error fetching table schema: " + e.getMessage());
-            return "fragments/result-table :: resultTable";
         }
+        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/execute")
     public String execute(@RequestParam String sql,
             Model model) {
         try {
+            Connection dbConnection = databaseService.getCurrentDbConnection();
             QueryResult result = databaseService.executeQuery(dbConnection, sql);
             model.addAttribute("result", result);
-            return "fragments/result-table :: resultTable";
+            return RESULTS_TABLE_FRAGMENT;
         } catch (SQLException e) {
             model.addAttribute("error", "SQL execution error: " + e.getMessage());
-            return "fragments/result-table :: resultTable";
+            return RESULTS_TABLE_FRAGMENT;
         }
     }
 
     @PostMapping("/disconnect")
     public String disconnect(SessionStatus status) {
         try {
-            dbConnection.close();
+            databaseService.closeConnection();
             status.setComplete();
             return "redirect:/";
         } catch (SQLException e) {
