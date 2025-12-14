@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.ansbeno.db.DatabaseService;
 import com.ansbeno.db.QueryResult;
@@ -97,6 +98,17 @@ public class DatabaseController {
         } catch (SQLException e) {
             model.addAttribute("error", "SQL execution error: " + e.getMessage());
             return "fragments/result-table :: resultTable";
+        }
+    }
+
+    @PostMapping("/disconnect")
+    public String disconnect(SessionStatus status) {
+        try {
+            dbConnection.close();
+            status.setComplete();
+            return "redirect:/";
+        } catch (SQLException e) {
+            return "redirect:/";
         }
     }
 }

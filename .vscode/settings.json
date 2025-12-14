@@ -1,5 +1,9 @@
 {
 	"java.configuration.updateBuildConfiguration": "interactive",
 	"java.compile.nullAnalysis.mode": "automatic",
-	"java.dependency.packagePresentation": "hierarchical"
+	"java.dependency.packagePresentation": "hierarchical",
+	"sonarlint.connectedMode.project": {
+		"connectionId": "http://localhost:9000",
+		"projectKey": "sql-tutor-web"
+	}
 }
