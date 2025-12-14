@@ -19,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DatabaseService {
 
       public Connection getServerConnection(String username, String password, String server) throws SQLException {
-            String url = "jdbc:postgresql://" + server + "/";
+            String url = "jdbc:postgresql://" + server + "/postgres";
+            log.info("Connecting to server: {}", url);
             return DriverManager.getConnection(url, username, password);
       }
 

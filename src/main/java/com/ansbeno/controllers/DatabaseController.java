@@ -17,7 +17,9 @@ import com.ansbeno.db.DatabaseService;
 import com.ansbeno.db.QueryResult;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 @SessionAttributes({ "server", "username", "password" })
@@ -51,6 +53,7 @@ public class DatabaseController {
             return "fragments/database-select :: databaseSelect";
         } catch (SQLException e) {
             model.addAttribute("error", "Connection error: " + e.getMessage());
+            log.error("Connection error: {}", e);
             return "fragments/database-select :: databaseSelect";
         }
     }
