@@ -65,7 +65,11 @@ public class DatabaseController {
             @ModelAttribute("password") String password,
             Model model) {
         try {
+
             Connection conn = databaseService.getDbConnection(username, password, server, database);
+            if (dbConnection != null)
+                // Close the previous connection
+                this.dbConnection.close();
             this.dbConnection = conn; // Store the connection in the session
             List<String> tables = databaseService.getTables(dbConnection, database);
             model.addAttribute("tables", tables);
