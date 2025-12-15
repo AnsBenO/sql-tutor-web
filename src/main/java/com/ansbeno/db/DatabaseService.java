@@ -23,7 +23,8 @@ public class DatabaseService {
       public Connection getServerConnection(String username, String password, String server) throws SQLException {
             String url = "jdbc:postgresql://" + server + "/postgres";
             log.info("Connecting to server: {}", url);
-            return DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
+            return conn;
       }
 
       public Connection getDbConnection(String username, String password, String server, String database)
@@ -31,7 +32,9 @@ public class DatabaseService {
 
             String url = "jdbc:postgresql://" + server + "/" + database;
             log.info("Connecting to database: {}", url);
-            return DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
+            this.dbConnection = conn;
+            return conn;
       }
 
       public Connection getCurrentDbConnection() throws SQLException {

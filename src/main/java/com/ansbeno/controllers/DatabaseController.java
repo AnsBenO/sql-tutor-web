@@ -27,7 +27,7 @@ public class DatabaseController {
 
     private final DatabaseService databaseService;
 
-    private static final String RESULTS_TABLE_FRAGMENT = "fragments/results-table :: resultsTable";
+    private static final String RESULTS_TABLE_FRAGMENT = "fragments/result-table :: resultTable";
 
     private static final String TABLE_LIST_FRAGMENT = "fragments/table-list :: tableList";
 
@@ -78,11 +78,12 @@ public class DatabaseController {
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
             model.addAttribute("success", "Connected to database successfully.");
+            return TABLE_LIST_FRAGMENT;
 
         } catch (SQLException e) {
             model.addAttribute("error", "Connection error: " + e.getMessage());
+            return TABLE_LIST_FRAGMENT;
         }
-        return TABLE_LIST_FRAGMENT;
     }
 
     @PostMapping("/showTable")
@@ -93,12 +94,15 @@ public class DatabaseController {
             if (conn != null) {
                 QueryResult schema = databaseService.getTableSchema(conn, tableName);
                 model.addAttribute("result", schema);
+                return RESULTS_TABLE_FRAGMENT;
+            } else {
+                throw new SQLException("Connection is null");
             }
 
         } catch (SQLException e) {
             model.addAttribute("error", "Error fetching table schema: " + e.getMessage());
+            return RESULTS_TABLE_FRAGMENT;
         }
-        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/execute")
@@ -108,11 +112,12 @@ public class DatabaseController {
             Connection dbConnection = databaseService.getCurrentDbConnection();
             QueryResult result = databaseService.executeQuery(dbConnection, sql);
             model.addAttribute("result", result);
+            return RESULTS_TABLE_FRAGMENT;
 
         } catch (SQLException e) {
             model.addAttribute("error", "SQL execution error: " + e.getMessage());
+            return RESULTS_TABLE_FRAGMENT;
         }
-        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/disconnect")
