@@ -1,6 +1,5 @@
 package com.ansbeno.controllers;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,6 +32,10 @@ public class DatabaseController {
 
     private static final String DATABASE_SELECT_FRAGMENT = "fragments/database-select :: databaseSelect";
 
+    private static final String ERROR_MESSAGE = "error";
+
+    private static final String SUCCESS_MESSAGE = "success";
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("server", "localhost:5432");
@@ -46,17 +49,19 @@ public class DatabaseController {
             @RequestParam String username,
             @RequestParam String password,
             Model model) {
-        try (Connection conn = databaseService.getServerConnection(username, password, server)) {
-
-            List<String> databases = databaseService.getDatabases(conn);
+        try {
+            // Establish server connection
+            databaseService.getServerConnection(username, password, server);
+            // Fetch databases
+            List<String> databases = databaseService.getDatabases();
             model.addAttribute("databases", databases);
             model.addAttribute("server", server);
             model.addAttribute("username", username);
             model.addAttribute("password", password);
-            model.addAttribute("success", "Connected to server successfully.");
+            model.addAttribute(SUCCESS_MESSAGE, "Connected to server successfully.");
 
         } catch (SQLException e) {
-            model.addAttribute("error", "Connection error: " + e.getMessage());
+            model.addAttribute(ERROR_MESSAGE, "Connection error: " + e.getMessage());
         }
         return DATABASE_SELECT_FRAGMENT;
     }
@@ -68,56 +73,40 @@ public class DatabaseController {
             @ModelAttribute("password") String password,
             Model model) {
         try {
-            // Close previous connection if exists
-            databaseService.closeConnection();
-
-            // Establish new connection
-            Connection conn = databaseService.getDbConnection(username, password, server, database);
-
-            List<String> tables = databaseService.getTables(conn, database);
+            List<String> tables = databaseService.getTables(database);
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
-            model.addAttribute("success", "Connected to database successfully.");
-            return TABLE_LIST_FRAGMENT;
+            model.addAttribute(SUCCESS_MESSAGE, "Connected to database successfully.");
 
         } catch (SQLException e) {
-            model.addAttribute("error", "Connection error: " + e.getMessage());
-            return TABLE_LIST_FRAGMENT;
+            model.addAttribute(ERROR_MESSAGE, "Connection error: " + e.getMessage());
         }
+        return TABLE_LIST_FRAGMENT;
     }
 
     @PostMapping("/showTable")
     public String showTable(@RequestParam String tableName,
             Model model) {
         try {
-            Connection conn = databaseService.getCurrentDbConnection();
-            if (conn != null) {
-                QueryResult schema = databaseService.getTableSchema(conn, tableName);
-                model.addAttribute("result", schema);
-                return RESULTS_TABLE_FRAGMENT;
-            } else {
-                throw new SQLException("Connection is null");
-            }
-
+            QueryResult schema = databaseService.getTableSchema(tableName);
+            model.addAttribute("result", schema);
         } catch (SQLException e) {
-            model.addAttribute("error", "Error fetching table schema: " + e.getMessage());
-            return RESULTS_TABLE_FRAGMENT;
+            model.addAttribute(ERROR_MESSAGE, "Error fetching table schema: " + e.getMessage());
         }
+        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/execute")
     public String execute(@RequestParam String sql,
             Model model) {
         try {
-            Connection dbConnection = databaseService.getCurrentDbConnection();
-            QueryResult result = databaseService.executeQuery(dbConnection, sql);
+            QueryResult result = databaseService.executeQuery(sql);
             model.addAttribute("result", result);
-            return RESULTS_TABLE_FRAGMENT;
 
         } catch (SQLException e) {
-            model.addAttribute("error", "SQL execution error: " + e.getMessage());
-            return RESULTS_TABLE_FRAGMENT;
+            model.addAttribute(ERROR_MESSAGE, "SQL execution error: " + e.getMessage());
         }
+        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/disconnect")

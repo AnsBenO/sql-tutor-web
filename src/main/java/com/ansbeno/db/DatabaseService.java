@@ -20,11 +20,13 @@ public class DatabaseService {
 
       private Connection dbConnection;
 
-      public Connection getServerConnection(String username, String password, String server) throws SQLException {
+      public void getServerConnection(String username, String password, String server) throws SQLException {
             String url = "jdbc:postgresql://" + server + "/postgres";
             log.info("Connecting to server: {}", url);
+            // close previous connection if exists
+            closeConnection();
             Connection conn = DriverManager.getConnection(url, username, password);
-            return conn;
+            this.dbConnection = conn;
       }
 
       public Connection getDbConnection(String username, String password, String server, String database)
@@ -32,21 +34,16 @@ public class DatabaseService {
 
             String url = "jdbc:postgresql://" + server + "/" + database;
             log.info("Connecting to database: {}", url);
+            // close previous connection if exists
+            closeConnection();
             Connection conn = DriverManager.getConnection(url, username, password);
             this.dbConnection = conn;
             return conn;
       }
 
-      public Connection getCurrentDbConnection() throws SQLException {
-            if (dbConnection != null && !dbConnection.isClosed()) {
-                  return dbConnection;
-            }
-            return null;
-      }
-
-      public List<String> getDatabases(Connection connection) throws SQLException {
+      public List<String> getDatabases() throws SQLException {
             List<String> databases = new ArrayList<>();
-            try (Statement statement = connection.createStatement()) {
+            try (Statement statement = this.dbConnection.createStatement()) {
                   ResultSet rs = statement.executeQuery("SELECT datname FROM pg_database;");
                   while (rs.next()) {
                         databases.add(rs.getString(1));
@@ -55,9 +52,9 @@ public class DatabaseService {
             return databases;
       }
 
-      public List<String> getTables(Connection connection, String database) throws SQLException {
+      public List<String> getTables(String database) throws SQLException {
             List<String> tables = new ArrayList<>();
-            DatabaseMetaData metaData = connection.getMetaData();
+            DatabaseMetaData metaData = this.dbConnection.getMetaData();
             String[] types = { "TABLE" };
             ResultSet rs = metaData.getTables(database, null, "%", types);
             while (rs.next()) {
@@ -66,8 +63,8 @@ public class DatabaseService {
             return tables;
       }
 
-      public QueryResult executeQuery(Connection connection, String sql) throws SQLException {
-            try (Statement st = connection.createStatement()) {
+      public QueryResult executeQuery(String sql) throws SQLException {
+            try (Statement st = this.dbConnection.createStatement()) {
                   ResultSet rs = st.executeQuery(sql);
                   ResultSetMetaData metaData = rs.getMetaData();
                   int columnCount = metaData.getColumnCount();
@@ -91,9 +88,9 @@ public class DatabaseService {
             }
       }
 
-      public QueryResult getTableSchema(Connection connection, String tableName) throws SQLException {
+      public QueryResult getTableSchema(String tableName) throws SQLException {
             String sql = "SELECT * FROM " + tableName + " LIMIT 1";
-            try (Statement st = connection.createStatement()) {
+            try (Statement st = this.dbConnection.createStatement()) {
                   ResultSet rs = st.executeQuery(sql);
                   ResultSetMetaData metaData = rs.getMetaData();
                   int columnCount = metaData.getColumnCount();
