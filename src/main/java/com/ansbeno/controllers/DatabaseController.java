@@ -29,6 +29,10 @@ public class DatabaseController {
 
     private static final String RESULTS_TABLE_FRAGMENT = "fragments/results-table :: resultsTable";
 
+    private static final String TABLE_LIST_FRAGMENT = "fragments/table-list :: tableList";
+
+    private static final String DATABASE_SELECT_FRAGMENT = "fragments/database-select :: databaseSelect";
+
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("server", "localhost:5432");
@@ -50,12 +54,11 @@ public class DatabaseController {
             model.addAttribute("username", username);
             model.addAttribute("password", password);
             model.addAttribute("success", "Connected to server successfully.");
-            return "fragments/database-select :: databaseSelect";
+
         } catch (SQLException e) {
             model.addAttribute("error", "Connection error: " + e.getMessage());
-            log.error("Connection error: {}", e);
-            return "fragments/database-select :: databaseSelect";
         }
+        return DATABASE_SELECT_FRAGMENT;
     }
 
     @PostMapping("/connectDatabase")
@@ -75,11 +78,11 @@ public class DatabaseController {
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
             model.addAttribute("success", "Connected to database successfully.");
-            return "fragments/table-list :: tableList";
+
         } catch (SQLException e) {
             model.addAttribute("error", "Connection error: " + e.getMessage());
-            return "fragments/table-list :: tableList";
         }
+        return TABLE_LIST_FRAGMENT;
     }
 
     @PostMapping("/showTable")
@@ -105,11 +108,11 @@ public class DatabaseController {
             Connection dbConnection = databaseService.getCurrentDbConnection();
             QueryResult result = databaseService.executeQuery(dbConnection, sql);
             model.addAttribute("result", result);
-            return RESULTS_TABLE_FRAGMENT;
+
         } catch (SQLException e) {
             model.addAttribute("error", "SQL execution error: " + e.getMessage());
-            return RESULTS_TABLE_FRAGMENT;
         }
+        return RESULTS_TABLE_FRAGMENT;
     }
 
     @PostMapping("/disconnect")
