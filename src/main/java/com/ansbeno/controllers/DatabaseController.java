@@ -73,6 +73,8 @@ public class DatabaseController {
             @ModelAttribute("password") String password,
             Model model) {
         try {
+            // Establish database connection
+            databaseService.getDbConnection(username, password, server, database);
             List<String> tables = databaseService.getTables(database);
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
