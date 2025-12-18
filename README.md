@@ -7,7 +7,11 @@
 
 A web-based PostgreSQL client for exploring databases, viewing table structures, and executing SQL queries in real-time.
 
+**View Table Schema**
 ![SQL Tutor Interface Concept](screenshots/screenshot.png)
+
+**Running Select Query**
+![Running Select Query](screenshots/select.png)
 
 ## Features :sparkles:
 
