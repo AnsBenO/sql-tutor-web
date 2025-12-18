@@ -13,19 +13,31 @@
             <!-- Main Content -->
             <div class="ml-[300px]">
 
+                  <div class="flex flex-col md:flex-row gap-8">
+                        <!-- Execute Query Section -->
+                        <div th:replace="~{/fragments/execute :: execute}"></div>
+                  </div>
+            </div>
+
+            <!-- Sidebar (Table List) -->
+            <div
+                  class="md:w-1/4 bg-indigo-100 rounded-lg p-4 shadow-inner overflow-auto min-h-[100vh] max-w-[300px] fixed top-0 left-0">
+
                   <!-- Server connection form -->
                   <fieldset>
                         <form hx-post="/connectServer" hx-target="#database-select" hx-swap="innerHTML"
-                              class="flex flex-col md:flex-row gap-4 mb-8 max-w-6xl mx-auto">
-                              <div class="flex flex-col md:flex-row gap-4 md:items-center md:justify-between w-full">
+                              class="flex flex-col md:flex-col gap-4 mb-4 max-w-6xl mx-auto">
+                              <div
+                                    class="flex flex-col md:flex-col gap-4 md:items-center md:justify-between w-full text-[14px] ">
 
-                                    <div class="flex flex-col md:flex-row gap-4 flex-1 w-full">
+                                    <!-- Server, Username, Password -->
+                                    <div class="flex flex-col md:flex-col gap-2 flex-1 w-full">
                                           <div class="flex-1 md:w-full relative">
                                                 <i
                                                       class="fas fa-server absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
                                                 <input type="text" name="server" placeholder="Server"
                                                       th:value="${server}"
-                                                      class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                                      class="w-full pl-10 pr-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                                                       required />
                                           </div>
 
@@ -33,7 +45,7 @@
                                                 <i
                                                       class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
                                                 <input type="text" name="username" placeholder="Username"
-                                                      class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                                      class="w-full pl-10 pr-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                                                       th:value="${username}" required />
                                           </div>
 
@@ -41,13 +53,14 @@
                                                 <i
                                                       class="fas fa-key absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"></i>
                                                 <input type="password" name="password" placeholder="Password"
-                                                      class="w-full pl-10 pr-4 py-3 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                                                      class="w-full pl-10 pr-4 py-2 border border-indigo-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                                                       th:value="${password}" required />
                                           </div>
                                     </div>
 
+                                    <!-- Connect Button -->
                                     <button type="submit"
-                                          class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed md:ml-auto">
+                                          class="w-full md:w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg shadow-md transition duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed md:ml-auto">
                                           <i class="fas fa-plug"></i>
                                           Connect Server
                                     </button>
@@ -58,26 +71,11 @@
                   </fieldset>
 
                   <!-- Database Selection -->
-                  <div id="database-select" class="mb-8 max-w-6xl mx-auto">
+                  <div id="database-select" class="mb-4 max-w-6xl mx-auto">
                         <!-- Database Selection content here -->
                   </div>
 
-                  <div class="flex flex-col md:flex-row gap-8">
 
-
-                        <!-- Execute Query Section -->
-                        <div th:replace="~{/fragments/execute :: execute}"></div>
-                  </div>
-            </div>
-
-            <!-- Sidebar (Table List) -->
-            <div
-                  class="md:w-1/4 bg-indigo-100 rounded-lg p-4 shadow-inner overflow-auto min-h-[100vh] max-w-[300px] fixed top-0 left-0">
-                  <h2
-                        class="text-lg font-semibold text-indigo-700 mb-4 border-b border-indigo-300 pb-2 flex items-center gap-2">
-                        <i class="fas fa-table"></i>
-                        Tables
-                  </h2>
                   <div id="table-list" class="space-y-2 text-indigo-900"></div>
             </div>
       </div>
