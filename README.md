@@ -17,7 +17,7 @@ A web-based PostgreSQL client for exploring databases, viewing table structures,
 
 -   **Database Explorer**: Browse databases/tables in hierarchical view
 -   **Schema Inspection**: View table columns, indexes, and relationships
--   **Query Playground**: Execute SQL queries with syntax highlighting
+-   **Query Playground**: Execute SQL queries
 
 ## Tech Stack :gear:
 
@@ -47,3 +47,4 @@ to run the app in dev mode (live reload) run the following commands:`npm install
 to run without live reload run `mvn jetty:run-war`
 
 the application will be available at: http://localhost:8080/
+
