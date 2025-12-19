@@ -22,7 +22,7 @@ import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 class WebConfig implements WebMvcConfigurer {
 
       @Bean
-      public SpringResourceTemplateResolver templateResolver() {
+      SpringResourceTemplateResolver templateResolver() {
             SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
             resolver.setPrefix("classpath:/templates/");
             resolver.setSuffix(".html");
@@ -33,7 +33,7 @@ class WebConfig implements WebMvcConfigurer {
       }
 
       @Bean
-      public SpringTemplateEngine templateEngine() {
+      SpringTemplateEngine templateEngine() {
             SpringTemplateEngine engine = new SpringTemplateEngine();
             engine.setTemplateResolver(templateResolver());
             engine.setEnableSpringELCompiler(true);
@@ -43,7 +43,7 @@ class WebConfig implements WebMvcConfigurer {
       }
 
       @Bean
-      public ViewResolver viewResolver() {
+      ViewResolver viewResolver() {
             ThymeleafViewResolver resolver = new ThymeleafViewResolver();
             resolver.setTemplateEngine(templateEngine());
             resolver.setCharacterEncoding("UTF-8");
