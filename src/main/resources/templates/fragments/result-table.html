@@ -1,8 +1,9 @@
 <!-- fragments/result-table.html -->
-<div th:fragment="resultTable">
-      <div th:if="${result}">
+<div th:fragment="resultTable" class="h-full">
+      <div th:if="${result.rows.size() > 0}">
             <div class="overflow-x-auto rounded-lg">
                   <table class="min-w-full divide-y divide-indigo-200">
+
                         <thead class="bg-indigo-50">
                               <tr>
                                     <th th:each="col : ${result.columnNames}"
@@ -19,6 +20,11 @@
                         </tbody>
                   </table>
             </div>
+
+      </div>
+      <div class="flex flex-col items-center justify-center h-full text-gray-400" th:if="${result.rows.size() == 0}">
+            <i class="fas fa-database text-4xl mb-2"></i>
+            <p>No results found</p>
       </div>
       <!--? ERROR MESSAGE BOX -->
       <div th:replace="~{fragments/error :: errorMessageBox(error=${error})}"></div>
