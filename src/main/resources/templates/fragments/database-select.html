@@ -7,7 +7,7 @@
             </legend>
 
             <!-- Search + Dropdown -->
-            <div class="flex flex-col gap-4 text-[14px]">
+            <div class="flex flex-col gap-4 text-[14px]" th:if="${databases.size() > 0}">
 
                   <!-- Search + Dropdown Box -->
                   <div class="flex-1 relative">
@@ -40,6 +40,15 @@
                               <option th:each="db : ${databases}" th:value="${db}" th:text="${db}"></option>
                         </select>
                   </form>
+            </div>
+
+            <div th:if="${databases.size() == 0}">
+
+                  <div class="flex flex-col items-center justify-center h-full text-gray-400">
+                        <i class="fas fa-database text-4xl mb-2"></i>
+                        <p>No databases found</p>
+                  </div>
+
             </div>
       </fieldset>
 
