@@ -51,7 +51,7 @@ public class DatabaseController {
             Model model) {
         try {
             // Establish server connection
-            databaseService.getServerConnection(username, password, server);
+            databaseService.connectServer(username, password, server);
             // Fetch databases
             List<String> databases = databaseService.getDatabases();
             model.addAttribute("databases", databases);
@@ -74,7 +74,7 @@ public class DatabaseController {
             Model model) {
         try {
             // Establish database connection
-            databaseService.getDbConnection(username, password, server, database);
+            databaseService.connectDatabase(username, password, server, database);
             List<String> tables = databaseService.getTables(database);
             model.addAttribute("tables", tables);
             model.addAttribute("database", database);
